@@ -1,0 +1,6 @@
+---
+- name: run make
+  become: yes
+  make:
+    chdir: "{{ ansible_env.HOME }}/sample-images/osbuild-manifests"
+    target: "{{ target_image }}.{{ target_arch }}.{{ target_filetype }}"

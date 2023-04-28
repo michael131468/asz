@@ -1,0 +1,12 @@
+---
+- name: load variables
+  ansible.builtin.include_vars: ../../../config.yaml
+
+- include_tasks: clone_sample_images.yaml
+  when: clone
+
+- include_tasks: prepare_osbuild.yaml
+  when: prepare_osbuild
+
+- include_tasks: run_make.yaml
+  when: run_make

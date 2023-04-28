@@ -1,0 +1,9 @@
+---
+- name: Local build
+  hosts: localhost
+  vars:
+    clone: yes
+    prepare_osbuild: yes
+    run_make: yes
+  roles:
+    - common

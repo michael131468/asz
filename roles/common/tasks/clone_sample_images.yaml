@@ -1,0 +1,5 @@
+---
+- name: Clone sample-images project
+  git:
+    repo: git@gitlab.com:CentOS/automotive/sample-images.git
+    dest: "{{ ansible_env.HOME }}/sample-images"
