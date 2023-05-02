@@ -1,52 +1,46 @@
 ---
-- name: Print OS and distro Ansible variables collected by setup
-  debug:
-    msg:
-      - "ansible_os_family: {{ ansible_os_family }}"
-      - "ansible_distribution: {{ ansible_distribution }}"
-      - "ansible_distribution_major_version: {{ ansible_distribution_major_version }}"
-      - "ansible_distribution_version: {{ ansible_distribution_version }}"
-      - "ansible_distribution_release: {{ ansible_distribution_release }}"
+- name: Show OS and distro Ansible variables collected by setup
+  ansible.builtin.shell: |
+    echo "ansible_os_family: {{ ansible_os_family }}"
+    echo "ansible_distribution: {{ ansible_distribution }}"
+    echo "ansible_distribution_major_version: {{ ansible_distribution_major_version }}"
+    echo "ansible_distribution_version: {{ ansible_distribution_version }}"
+    echo "ansible_distribution_release: {{ ansible_distribution_release }}"
+  ignore_errors: true
+  register: results_init
 
 # TODO: end playbook if unsupported distro encountered
-- name: Install general dependencies
+- name: Prepare _build directory
   become: yes
-  ansible.builtin.dnf:
-    name:
-      - make
-      - skopeo
+  ansible.builtin.file:
+    path: "{{ sample_images_build_path }}"
+    state: directory
+  ignore_errors: true
+  register: results_build_dir
 
 - name: Enable OSBuild copr
   become: yes
   community.general.copr:
     state: enabled
     name: '@osbuild/osbuild'
-
-- name: Install OSBuild rpms
-  become: yes
-  ansible.builtin.dnf:
-    name:
-      - osbuild
-      - osbuild-tools
-      - osbuild-ostree
+  ignore_errors: true
+  register: results_copr_osbuild
 
 - name: Enable ostree-compliance-mode copr
   become: yes
   community.general.copr:
     state: enabled
     name: 'ecurtin/osbuildtest-ostree-compliance-mode'
-
-- name: Install ostree-compliance-mode
-  become: yes
-  ansible.builtin.dnf:
-    name:
-      - osbuildtest-ostree-compliance-mode
+  ignore_errors: true
+  register: results_copr_ostree_compliance_mode
 
 - name: Enable osbuild-aboot copr
   become: yes
   community.general.copr:
     state: enabled
     name: 'alexl/osbuild-aboot'
+  ignore_errors: true
+  register: results_copr_osbuild_aboot
 
 - name: Enable abootimg copr
   become: yes
@@ -54,19 +48,22 @@
     state: enabled
     name: 'alexl/abootimg'
     chroot: epel-9-{{ ansible_architecture }}
+  ignore_errors: true
+  register: results_copr_abootimg
 
-- name: Install abootimg and aboot-update
+- name: Install dependencies
   become: yes
   ansible.builtin.dnf:
     name:
       - abootimg
       - aboot-update
-
-- name: Prepare _build directory
-  become: yes
-  ansible.builtin.file:
-    path: "{{ sample_images_build_path }}"
-    state: directory
+      - make
+      - osbuild
+      - osbuild-tools
+      - osbuild-ostree
+      - osbuildtest-ostree-compliance-mode
+  ignore_errors: true
+  register: results_install_deps
 
 - name: Download osbuildvm-images
   become: yes
@@ -74,8 +71,61 @@
     url: "{{ osbuild_vmimages_download_baseurl }}/{{ item }}"
     dest: "{{ sample_images_build_path }}/{{ item }}"
     mode: 0644
-  when: target_arch == "aarch64" and ansible_architecture == "x86_64"
+  when: target_arch == "aarch64" and ansible_architecture == "x86_64" and results_build_dir is not failed
   with_items:
     - osbuildvm-aarch64.img
     - osbuildvm-aarch64.initramfs
     - osbuildvm-aarch64.vmlinuz
+  ignore_errors: true
+  register: results_download_vm
+
+- name: Write log files
+  copy:
+    content: |
+      System Information
+      ==================
+      {{ results_init.stdout }}
+
+      Preparing Build Directory
+      =========================
+      {{ results_build_dir }}
+
+      Enabling Copr: @osbuild/osbuild
+      ===============================
+      {{ results_copr_osbuild }}
+
+      Enabling Copr: ecurtin/osbuildtest-ostree-compliance-mode
+      =========================================================
+      {{ results_copr_ostree_compliance_mode }}
+
+      Enabling Copr: alexl/osbuild-aboot
+      ==================================
+      {{ results_copr_osbuild_aboot }}
+
+      Enabling Copr: alexl/abootimg
+      =============================
+      {{ results_copr_abootimg }}
+
+      Installing dependencies
+      =======================
+      {{ results_install_deps }}
+
+      Downloading VM
+      ==============
+      {{ results_download_vm }}
+    dest: "./out/log.prepare_osbuild.txt"
+  delegate_to: localhost
+
+- name: Error handler
+  debug:
+     var: results
+  failed_when: true
+  when: >
+     results_init is failed or
+     results_build_dir is failed or
+     results_copr_osbuild is failed or
+     results_copr_ostree_compliance_mode is failed or
+     results_copr_osbuild_aboot is failed or
+     results_copr_abootimg is failed or
+     results_install_deps is failed or
+     results_download_vm is failed

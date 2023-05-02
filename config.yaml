@@ -5,6 +5,7 @@ target_filetype: qcow2
 
 # Advanced configuration
 osbuild_vmimages_download_baseurl: "https://autosd.sig.centos.org/AutoSD-9/nightly/osbuildvm-images"
-sample_images_giturl: ""
+sample_images_git_url: "git@gitlab.com:CentOS/automotive/sample-images.git"
+sample_images_git_ref: "main"
 sample_images_path: "{{ ansible_env.HOME }}/sample-images"
 sample_images_build_path: "{{ ansible_env.HOME }}/sample-images/osbuild-manifests/_build"

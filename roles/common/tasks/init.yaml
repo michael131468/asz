@@ -1,0 +1,38 @@
+---
+- name: Prepare build and initiate logging
+  ansible.builtin.shell: |
+    date
+    echo -n "whoami: "
+    whoami
+    echo "HOME: {{ ansible_env.HOME }}"
+    echo "# Basic Configuration"
+    echo "target_image: {{ target_image }}"
+    echo "target_arch: {{ target_arch }}"
+    echo "target_filetype: {{ target_filetype }}"
+    echo "# Advanced Configuration"
+    echo "osbuild_vmimages_download_baseurl: {{ osbuild_vmimages_download_baseurl }}"
+    echo "sample_images_git_url: {{ sample_images_git_url }}"
+    echo "sample_images_git_ref: {{ sample_images_git_ref }}"
+    echo "sample_images_path: {{ sample_images_path }}"
+    echo "sample_images_build_path: {{ sample_images_build_path }}"
+  ignore_errors: true
+  register: results
+
+- name: Prepare output directory
+  ansible.builtin.file:
+    path: "./out"
+    state: directory
+  delegate_to: localhost
+
+- name: Write log files
+  copy:
+    content: "{{ results.stdout }}"
+    dest: "./out/log.init.txt"
+  delegate_to: localhost
+
+- name: Error handler
+  debug:
+     var: results
+  failed_when: true
+  when:
+     results is failed

@@ -2,6 +2,8 @@
 - name: load variables
   ansible.builtin.include_vars: ../../../config.yaml
 
+- include_tasks: init.yaml
+
 - include_tasks: clone_sample_images.yaml
   when: clone
 
