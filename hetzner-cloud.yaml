@@ -1,0 +1,34 @@
+---
+- name: instantiate-builder
+  hosts: localhost
+  roles:
+    - hetzner-cloud-instantiate
+
+- name: initiate build
+  hosts: my-server
+  remote_user: root
+  roles:
+    - common
+
+- name: clone sample images
+  hosts: my-server
+  remote_user: root
+  roles:
+    - clone-sample-images
+
+- name: prepare osbuild
+  hosts: my-server
+  remote_user: root
+  roles:
+    - prepare-osbuild
+
+- name: run make
+  hosts: my-server
+  remote_user: root
+  roles:
+    - run-make
+
+- name: teardown-builder
+  hosts: localhost
+  roles:
+    - hetzner-cloud-teardown
