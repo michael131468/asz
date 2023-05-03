@@ -1,0 +1,5 @@
+---
+- name: load variables
+  ansible.builtin.include_vars: ../../../config.yaml
+
+- include_tasks: run_make.yaml

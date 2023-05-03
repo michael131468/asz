@@ -1,0 +1,20 @@
+---
+- name: initiate build
+  hosts: localhost
+  roles:
+    - common
+
+- name: clone sample images
+  hosts: localhost
+  roles:
+    - clone-sample-images
+
+- name: prepare osbuild
+  hosts: localhost
+  roles:
+    - prepare-osbuild
+
+- name: run make
+  hosts: localhost
+  roles:
+    - run-make

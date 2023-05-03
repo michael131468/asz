@@ -1,0 +1,32 @@
+---
+- name: run make
+  become: yes
+  make:
+    chdir: "{{ ansible_env.HOME }}/sample-images/osbuild-manifests"
+    target: "{{ target_image }}.{{ target_arch }}.{{ target_filetype }}"
+  register: results
+
+- name: Write log files
+  copy:
+    content: "{{ results.stdout }}"
+    dest: "./out/log.run_make.txt"
+  delegate_to: localhost
+
+- name: Error handler
+  debug:
+     var: results
+  failed_when: true
+  when:
+     results is failed
+
+- name: gather output (image)
+  fetch:
+    src: "{{ sample_images_path }}/osbuild-manifests/{{ target_image }}.{{ target_arch }}.{{ target_filetype }}"
+    dest: "./out/"
+    flat: yes
+
+- name: gather output (osbuild json)
+  fetch:
+    src: "{{ sample_images_build_path }}/{{ target_image }}.{{ target_arch }}.json"
+    dest: "./out/"
+    flat: yes
