@@ -1,4 +1,9 @@
 ---
+- name: Install git
+  ansible.builtin.package:
+    name: git
+    state: present
+
 - name: Clone sample-images project
   ansible.builtin.git:
     repo: "{{ sample_images_git_url }}"
