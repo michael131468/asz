@@ -1,0 +1,32 @@
+---
+summary: Run Zeppelin in local virtual machine
+description:
+  This wraps Zeppelin with tmt allowing users to abuse tmt to do things such
+  as run Zeppelin in a virtual machine or with the testing-farm SaaS.
+provision:
+  how: virtual
+  image: centos-stream:9
+prepare:
+  - name: package dependencies
+    how: install
+    package:
+      - python3-pip
+      - git
+  - name: ansible
+    how: shell
+    script: python3 -m pip install --user ansible
+  - name: ansible-galaxy
+    how: shell
+    script: ansible-galaxy collection install community.general
+execute:
+  how: tmt
+  script: |
+    # For some reason 'path' doesn't work so manually cd to the tree dir
+    cd ../../../tree
+    # Provide some debug info
+    pwd
+    ls -al
+    # Run the local build playbook
+    ansible-playbook local.yaml
+    # Export data back out of the virtual machine to the host
+    cp -r out ../data/out
