@@ -16,6 +16,12 @@
   roles:
     - clone-sample-images
 
+- name: clone custom images
+  hosts: my-server
+  remote_user: root
+  roles:
+    - clone-custom-images
+
 - name: prepare osbuild
   hosts: my-server
   remote_user: root
