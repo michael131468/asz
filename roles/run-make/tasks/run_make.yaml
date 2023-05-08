@@ -1,14 +1,25 @@
 ---
+- name: decide make params
+  set_fact:
+    run_make_params:
+      IMAGEDIR: "{{ custom_images_path if custom_images_path is defined else '' }}"
+
 - name: run make
   become: yes
   make:
-    chdir: "{{ ansible_env.HOME }}/sample-images/osbuild-manifests"
+    chdir: "{{ sample_images_path }}/osbuild-manifests"
     target: "{{ target_image }}.{{ target_arch }}.{{ target_filetype }}"
+    params: "{{ run_make_params|dict2items|rejectattr('value', 'equalto', '')|list|items2dict }}"
+  ignore_errors: true
   register: results
 
 - name: Write log files
   copy:
-    content: "{{ results.stdout }}"
+    content: |
+      chdir: {{ sample_images_path }}/osbuild-manifests
+      target: {{ target_image }}.{{ target_arch }}.{{ target_filetype }}
+      params: {{ run_make_params|dict2items|rejectattr('value', 'equalto', '')|list|items2dict }}
+      {{ results.stdout }}
     dest: "./out/log.run_make.txt"
   delegate_to: localhost
 

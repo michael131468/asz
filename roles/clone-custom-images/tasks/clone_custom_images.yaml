@@ -1,0 +1,29 @@
+---
+- name: Install git
+  ansible.builtin.package:
+    name: git
+    state: present
+  become: yes
+
+- name: Clone custom-images project
+  ansible.builtin.git:
+    repo: "{{ custom_images_git_url }}"
+    dest: "{{ custom_images_path }}"
+    version: "{{ custom_images_git_ref }}"
+  ignore_errors: true
+  register: results
+  when: custom_images_git_url is defined
+
+- name: Write log files
+  copy:
+    content: "{{ results }}"
+    dest: "./out/log.clone_custom_images.txt"
+  delegate_to: localhost
+  when: custom_images_git_url is defined
+
+- name: Error handler
+  debug:
+    var: results
+  failed_when: true
+  when:
+    custom_images_git_url is defined and results is failed

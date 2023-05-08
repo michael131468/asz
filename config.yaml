@@ -4,6 +4,10 @@ target_image: cs9-qemu-minimal-regular
 target_arch: aarch64
 target_filetype: qcow2
 
+custom_images_git_url: "https://gitlab.com/redhat/edge/ci-cd/pipe-x/custom-images.git"
+custom_images_git_ref: "main"
+custom_images_path: "{{ ansible_env.HOME }}/custom-images"
+
 # == Advanced configuration ==
 
 # osbuild_vmimages_download_baseurl directs where to fetch osbuildvm-images from
