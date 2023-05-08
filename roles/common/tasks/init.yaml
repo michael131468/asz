@@ -11,6 +11,7 @@
     echo "target_filetype: {{ target_filetype }}"
     echo "# Advanced Configuration"
     echo "osbuild_vmimages_download_baseurl: {{ osbuild_vmimages_download_baseurl }}"
+    echo "osbuild_packages: {{ osbuild_packages }}"
     echo "sample_images_git_url: {{ sample_images_git_url }}"
     echo "sample_images_git_ref: {{ sample_images_git_ref }}"
     echo "sample_images_path: {{ sample_images_path }}"
