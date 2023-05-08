@@ -18,6 +18,20 @@
   ignore_errors: true
   register: results
 
+- name: Warn for cross-arch assembly
+  ansible.builtin.debug:
+    msg:
+      - "Warning! You're assembling aarch64 system images on an x86_64 host."
+      - "Emulation will be used and the process will be very slow!"
+  when: target_arch == "aarch64" and ansible_architecture == "x86_64"
+
+- name: Warn for unsupported cross-arch assembly
+  ansible.builtin.debug:
+    msg:
+      - "Warning! You're attempting to assemble x86_64 system images on an aarch64 host."
+      - "This is not supported yet!"
+  when: target_arch == "x86_64" and ansible_architecture == "aarch64"
+
 - name: Prepare output directory
   ansible.builtin.file:
     path: "./out"
