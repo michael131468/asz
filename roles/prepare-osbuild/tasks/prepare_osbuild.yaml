@@ -23,6 +23,7 @@
   community.general.copr:
     state: enabled
     name: '@osbuild/osbuild'
+    chroot: "{{ 'epel-9-'+ansible_architecture if ansible_distribution == 'RedHat' else omit }}"
   ignore_errors: true
   register: results_copr_osbuild
 
@@ -31,6 +32,7 @@
   community.general.copr:
     state: enabled
     name: 'ecurtin/osbuildtest-ostree-compliance-mode'
+    chroot: "{{ 'epel-9-'+ansible_architecture if ansible_distribution == 'RedHat' else omit }}"
   ignore_errors: true
   register: results_copr_ostree_compliance_mode
 
@@ -39,6 +41,7 @@
   community.general.copr:
     state: enabled
     name: 'alexl/osbuild-aboot'
+    chroot: "{{ 'epel-9-'+ansible_architecture if ansible_distribution == 'RedHat' else omit }}"
   ignore_errors: true
   register: results_copr_osbuild_aboot
 
