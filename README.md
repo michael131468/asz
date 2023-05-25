@@ -65,6 +65,13 @@ Since Zeppelin is based on Ansible, you must have it installed on the computer
 that starts the build process (aka your personal computer). You can find out
 more [here][3] on how to install it.
 
+In addition to having installed ansible, you need the [community.general
+Ansible collection][9] installed also.
+
+```
+ansible-galaxy collection install community.general
+```
+
 ## Running Builds Locally
 
 Zeppelin can orchestrate the build operations on the local computer that runs
@@ -195,3 +202,4 @@ scripts may be added to the resulting directory.
 [6]: https://pypi.org/project/hcloud/
 [7]: https://docs.ansible.com/ansible/latest/collections/hetzner/hcloud/index.html
 [8]: https://tmt.readthedocs.io/en/stable/overview.html
+[9]: https://galaxy.ansible.com/community/general
