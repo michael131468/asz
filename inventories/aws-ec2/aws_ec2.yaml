@@ -1,0 +1,8 @@
+plugin: amazon.aws.aws_ec2
+hostnames:
+  - tag:Name
+filters:
+  tag:asz:
+    - "1"
+compose:
+  ansible_host: public_ip_address

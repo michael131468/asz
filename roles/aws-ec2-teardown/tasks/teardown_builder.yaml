@@ -1,0 +1,7 @@
+---
+- name: Ensure the server is absent (remove if needed)
+  amazon.aws.ec2_instance:
+    state: absent
+    region: "{{ aws_ec2_aarch64_region if target_arch == 'aarch64' else aws_ec2_x86_64_region }}"
+    instance_ids:
+      - "{{ hostvars['asz-server-'+server_id].instance_id }}"
