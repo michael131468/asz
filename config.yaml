@@ -1,22 +1,18 @@
+# See docs/config.md for documentation on the different parameters in this file
+
 # == Basic configuration ==
 
-target_image: cs9-qemu-minimal-regular
-target_arch: aarch64
-target_filetype: qcow2
+target_image: cs9-qemu-qa-ostree
+target_arch: x86_64
+target_filetype: img
 
 custom_images_git_url: "https://gitlab.com/redhat/edge/ci-cd/pipe-x/custom-images.git"
 custom_images_git_ref: "main"
 custom_images_path: "{{ ansible_env.HOME }}/custom-images"
 
 # == Advanced configuration ==
-
-# osbuild_vmimages_download_baseurl directs where to fetch osbuildvm-images from
-# This is used for cross-arch assembly (building aarch64 images on x86_64 hosts)
 osbuild_vmimages_download_baseurl: "https://autosd.sig.centos.org/AutoSD-9/nightly/osbuildvm-images"
 
-# osbuild_packages can be used to pin specific versions of osbuild by setting the value param
-# eg. value: "osbuild-84-1.20230505134457921609.main.12.gdfcd847.el9"
-# leaving the value equal to the name will enable using the latest versions by default
 osbuild_packages:
   - package: "osbuild"
     value: "osbuild"
@@ -27,11 +23,8 @@ osbuild_packages:
   - package: "osbuildtest-ostree-compliance-mode"
     value: "osbuildtest-ostree-compliance-mode"
 
-# git reference for sample-images project (you can change sample_images_git_ref to pin the version)
 sample_images_git_url: "https://gitlab.com/CentOS/automotive/sample-images.git"
 sample_images_git_ref: "main"
-
-# local path to clone sample-images into
 sample_images_path: "{{ ansible_env.HOME }}/sample-images"
 sample_images_build_path: "{{ sample_images_path }}/osbuild-manifests/_build"
 
