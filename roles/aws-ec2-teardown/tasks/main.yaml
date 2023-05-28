@@ -1,0 +1,6 @@
+---
+- name: load variables
+  ansible.builtin.include_vars: ../../../config.yaml
+
+# Teardown the hetzner server
+- include_tasks: teardown_builder.yaml 

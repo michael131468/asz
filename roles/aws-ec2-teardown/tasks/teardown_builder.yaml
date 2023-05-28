@@ -1,0 +1,5 @@
+---
+- name: Ensure the server is absent (remove if needed)
+  hcloud_server:
+    name: my-server
+    state: absent

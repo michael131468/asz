@@ -138,6 +138,49 @@ The results of the build (on success) can be found in the `out` directory
 (created in the current working directory). See the [Outputs section](#Output-Directory)
 below for more details on the output contents.
 
+## Running Builds on AWS EC2
+
+Zeppelin can orchestrate spawning an AWS EC2 server instance, running the build
+operations on said server, fetching the results back to the users computer, and
+deleting the EC2 server as a final clean up operation.
+
+> :warning: Be warned! If the build fails or is cancelled midway through, the
+> server instance is not automatically cleaned up! Later I intend to add a
+> playbook to help do manual clean ups but until then you should keep an eye on
+> the usage billing of your account to avoid any nasty surprises.
+
+To build with AWS, [you need an existing account][9] and you need to [generate
+an access key or security token][10] and [configure your shell environment][11]
+as needed (such as setting environment variables like below).
+
+```
+export AWS_ACCESS_KEY_ID="xxx"
+export AWS_SECRET_ACCESS_KEY="yyy"
+```
+
+In addition to having [Ansible installed][2], you must also install the
+[amazon.aws Ansible module][12]. This enables the playbooks to interact with the
+AWS EC2 API.
+
+```
+ansible-galaxy collection install amazon.aws
+```
+
+You need to have an [SSH key pair already provisioned in your AWS account][14]
+and configure the config.yaml accordingly based on the name (see:
+`aws_ec2_aarch64_ssh_keys` and `aws_ec2_x86_64_ssh_keys`).
+
+You can run a build with AWS EC2 by invoking `ansible-playbook` on the
+`aws-ec2.yaml` playbook with the aws\_ec2 inventory.
+
+```
+ansible-playbook -i inventories/aws-ec2/aws_ec2.yaml aws-ec2.yaml
+```
+
+The results of the build (on success) can be found in the `out` directory
+(created in the current working directory). See the [Outputs section](#Output-Directory)
+below for more details on the output contents.
+
 ## Running Builds with Virtual Machines (By Abusing tmt)
 
 We can abuse [tmt (test management tool)][8] to run Zeppelin in a virtual
@@ -203,3 +246,9 @@ scripts may be added to the resulting directory.
 [7]: https://docs.ansible.com/ansible/latest/collections/hetzner/hcloud/index.html
 [8]: https://tmt.readthedocs.io/en/stable/overview.html
 [9]: https://galaxy.ansible.com/community/general
+[10]: https://docs.aws.amazon.com/accounts/latest/reference/manage-acct-creating.html
+[11]: https://repost.aws/knowledge-center/create-access-key
+[12]: https://docs.ansible.com/ansible/latest/collections/amazon/aws/docsite/guide_aws.html#authentication
+[13]: https://docs.ansible.com/ansible/latest/collections/amazon/aws/docsite/guide_aws.html
+[14]: https://galaxy.ansible.com/community/general
+[15]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html

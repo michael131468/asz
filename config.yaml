@@ -47,3 +47,16 @@ hcloud_x86_64_image: "centos-stream-9"
 hcloud_x86_64_location: "fsn1"
 hcloud_x86_64_ssh_keys:
   - "michael@fedora"
+
+# AWS EC2 configuration
+aws_ec2_aarch64_server_type: "t4g.medium"
+aws_ec2_aarch64_ami: "ami-0a830948c354b21a5"
+aws_ec2_aarch64_location: "eu-central-1"
+aws_ec2_aarch64_ssh_keys:
+  - "michael@fedora"
+
+aws_ec2_x86_64_server_type: ""
+aws_ec2_x86_64_ami: "ami-0a830948c354b21a5"
+aws_ec2_x86_64_location: "eu-central-1"
+aws_ec2_x86_64_ssh_keys:
+  - "michael@fedora"

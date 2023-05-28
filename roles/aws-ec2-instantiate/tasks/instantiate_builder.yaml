@@ -1,0 +1,14 @@
+---
+- name: Create a basic server with ssh key
+  hcloud_server:
+    name: my-server
+    server_type: "{{ hcloud_aarch64_server_type if target_arch == 'aarch64' else hcloud_x86_64_server_type }}"
+    image: "{{ hcloud_aarch64_image if target_arch == 'aarch64' else hcloud_x86_64_image }}"
+    location: "{{ hcloud_aarch64_location if target_arch == 'aarch64' else hcloud_x86_64_location }}"
+    ssh_keys: "{{ hcloud_aarch64_ssh_keys if target_arch == 'aarch64' else hcloud_x86_64_ssh_keys }}"
+    state: present
+
+- name: Ensure the server is started
+  hcloud_server:
+    name: my-server
+    state: started
