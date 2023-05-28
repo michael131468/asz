@@ -109,6 +109,7 @@ for each. Details for each use case can be found in the linked documents.
 
 - [Running builds locally](docs/building-locally.md)
 - [Running builds on Hetzner Cloud](docs/building-with-hetzner-cloud.md)
+- [Running builds on AWS EC2](docs/building-with-aws-ec2.md)
 - [Running builds with tmt](docs/building-with-tmt.md)
 
 Some common scenarios are also documented:
