@@ -4,7 +4,7 @@ Automotive-SIG Zeppelin - Take your automotive-sig builds to the clouds
 
 ## About
 
-Zeppelin is a meta build system for the [Automotive-SIG sample-images][0]
+Zeppelin is a meta build system for the [Automotive-SIG sample-images][1]
 project with the goal being to enable building customised AutoSD system images
 using the cloud.
 
@@ -15,7 +15,7 @@ aarch64 system images without emulation for only a few cents per build!
 
 ## Background
 
-The [CentOS Automotive-SIG project][1] provides a Makefile-based build system to
+The [CentOS Automotive-SIG project][3] provides a Makefile-based build system to
 assemble system-images (with OSBuild). This build system supports configuration
 via both command line parameters and custom yaml snippet files that extend /
 overwrite the default image configuration.
@@ -47,13 +47,17 @@ The build host and system-image target build configuration is defined in
 `config.yaml`. This yaml file is loaded by the different roles to dynamically
 configure them at runtime.
 
-The system image build target is configured with the variables:
+A deep dive in the `config.yaml` can be found in:
+[docs/config.md](docs/config.md).
+
+The minimal config to get started are the three following variables which
+configure the system image build target:
 
 - target_image
 - target_arch
 - target_filetype
 
-These variables align with the [Automotive-SIG Makefile targets][1] so you can
+These variables align with the [Automotive-SIG Makefile targets][3] so you can
 refer to their documentation for details.
 
 In the future there will be a simple `configure.sh` to help generate this
@@ -62,119 +66,30 @@ configuration yaml.
 ## Requirements
 
 Since Zeppelin is based on Ansible, you must have it installed on the computer
-that starts the build process (aka your personal computer). You can find out
-more [here][3] on how to install it.
+that starts the build process (aka your personal computer). Typically you can
+install Ansible with pip.
+
+```
+python3 -m pip install --user ansible
+```
+
+You can find out more [here][4] on how to install it.
 
 In addition to having installed ansible, you need the [community.general
-Ansible collection][9] installed also.
+Ansible collection][5] installed also.
 
 ```
 ansible-galaxy collection install community.general
 ```
 
-## Running Builds Locally
+## Usage
 
-Zeppelin can orchestrate the build operations on the local computer that runs
-Ansible. Local builds are supported given the host machine is one of the
-supported distros:
+Zeppelin supports a variety of use cases and configuration/instructons differ
+for each. Details for each use case can be found in the linked documents.
 
-- Fedora 37
-
-You can run a local build by invoking `ansible-playbook` on the `local.yaml`
-playbook with the `-K` parameter.
-
-```
-ansible-playbook local.yaml -K
-```
-
-The `-K` parameter is needed because sudo/root privileges are needed to run
-OSBuild.
-
-> :warning: If the builder cpu architecture is x86_64 and an aarch64 system
-> image is configured as the build target, qemu will be used automatically to
-> wrap the build process (see [Building in a virtual machine][4]) but this
-> will be very slow to complete.
-
-The results of the build (on success) can be found in the `out` directory
-(created in the current working directory). See the [Outputs section below](#Output-Directory)
-for more details on the output contents.
-
-## Running Builds on Hetzner Cloud
-
-Zeppelin can orchestrate spawning a cloud server instance on Hetzner Cloud,
-running the build operations on said server, fetching the results back to the
-users computer, and deleting the cloud server as a final clean up operation.
-
-> :warning: Be warned! If the build fails or is cancelled midway through, the
-> server instance is not automatically cleaned up! Later I intend to add a
-> playbook to help do manual clean ups but until then you should keep an eye on
-> the usage billing of your account to avoid any nasty surprises.
-
-To build with Hetzner Cloud, [you need an existing account][1] and you need to
-[generate an API key][3] and [add it as the shell environment variable][5]:
-`HCLOUD_TOKEN`.
-
-```
-export HCLOUD_TOKEN=abc123
-```
-
-In addition to having [Ansible installed][2], you must also install the [hcloud
-pypi package][6] and the [hetzner.hcloud Ansible module][7]. This enables the
-playbooks to interact with the Hetzner Cloud API.
-
-```
-pip install hcloud
-ansible-galaxy collection install hetzner.hcloud
-```
-
-You can run a build with Hetzner cloud by invoking `ansible-playbook` on the
-`hetzner-cloud.yaml` playbook with the hetzner-cloud inventory.
-
-```
-ansible-playbook -i inventories/hetzner-cloud/hcloud.yaml hetzner-cloud.yaml
-```
-
-The results of the build (on success) can be found in the `out` directory
-(created in the current working directory). See the [Outputs section](#Output-Directory)
-below for more details on the output contents.
-
-## Running Builds with Virtual Machines (By Abusing tmt)
-
-We can abuse [tmt (test management tool)][8] to run Zeppelin in a virtual
-machine (locally). tmt is a testing framework tool that runs tests in an
-ansible-style workflow and has inbuilt provisioning mechanisms to spawn said
-test plans in containers, virtual machines or locally with no wrapper.
-
-Zeppelin takes advantage of this by having a tmt test plan (see:
-`./tmt/zeppelin.fmf`) that simply executes Zeppelin and extracts the resulting
-output files back to the host operating system.
-
-You can run the tmt test plan locally by calling `tmt run`.
-
-```
-tmt run -vvvv
-```
-
-Using -vvvv as a parameter enables an excessive logging level which provides
-live logs of the Zeppelin process.
-
-The output will not be stored in the `out` directory like the other execution
-methods did so far. When tmt is executed, the first line it prints will show
-its working directory (eg. `/var/tmp/tmt/run-001`) and it's under this directory
-where the output data will end up.
-
-Example:
-
-```
-$ ls -al /var/tmp/tmt/run-001/tmt/zeppelin/data/out
-total 242208
--rw-r--r--. 1 michael michael    128911 May  4 16:47 cs9-qemu-minimal-regular.x86_64.json
--rw-r--r--. 1 michael michael 247791616 May  4 16:47 cs9-qemu-minimal-regular.x86_64.qcow2
--rw-r--r--. 1 michael michael       103 May  4 16:47 log.clone_sample_images.txt
--rw-r--r--. 1 michael michael       501 May  4 16:47 log.init.txt
--rw-r--r--. 1 michael michael      4407 May  4 16:47 log.prepare_osbuild.txt
--rw-r--r--. 1 michael michael     79027 May  4 16:47 log.run_make.txt
-```
+- [Running builds locally](docs/building-locally.md)
+- [Running builds on Hetzner Cloud](docs/building-with-hetzner-cloud.md)
+- [Running builds with tmt](docs/building-with-tmt.md)
 
 ## Output Directory
 
@@ -193,13 +108,8 @@ scripts may be added to the resulting directory.
 > :warning: The output directory is not cleaned automatically between runs of
 > the playbooks so you must manually do so.
 
-[0]: https://sigs.centos.org/automotive/
-[1]: https://sigs.centos.org/automotive/building/#using-makefile-to-build-the-image
+[1]: https://sigs.centos.org/automotive/
 [2]: https://www.hetzner.com/cloud
-[3]: https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-and-upgrading-ansible
-[4]: https://sigs.centos.org/automotive/building/#building-in-a-virtual-machine
-[5]: https://unix.stackexchange.com/questions/117467/how-to-permanently-set-environmental-variables
-[6]: https://pypi.org/project/hcloud/
-[7]: https://docs.ansible.com/ansible/latest/collections/hetzner/hcloud/index.html
-[8]: https://tmt.readthedocs.io/en/stable/overview.html
-[9]: https://galaxy.ansible.com/community/general
+[3]: https://sigs.centos.org/automotive/building/#using-makefile-to-build-the-image
+[4]: https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-and-upgrading-ansible
+[5]: https://galaxy.ansible.com/community/general
