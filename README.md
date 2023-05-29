@@ -91,6 +91,14 @@ for each. Details for each use case can be found in the linked documents.
 - [Running builds on Hetzner Cloud](docs/building-with-hetzner-cloud.md)
 - [Running builds with tmt](docs/building-with-tmt.md)
 
+Some common scenarios are also documented:
+
+- [How can I run Zeppelin locally with a modified sample-images repository?][faq1]
+- [How can I run Zeppelin locally with a modified custom-images repository?][faq2]
+
+[faq1]: /docs/faq/modified-sample-images.md
+[faq2]: /docs/faq/modified-custom-images.md
+
 ## Output Directory
 
 Zeppelin will create a directory named `out` in your current working directory
