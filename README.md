@@ -116,6 +116,10 @@ scripts may be added to the resulting directory.
 > :warning: The output directory is not cleaned automatically between runs of
 > the playbooks so you must manually do so.
 
+## License
+
+This project is licensed under the MIT license (see LICENSE file).
+
 [1]: https://sigs.centos.org/automotive/
 [2]: https://www.hetzner.com/cloud
 [3]: https://sigs.centos.org/automotive/building/#using-makefile-to-build-the-image
