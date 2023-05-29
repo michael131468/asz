@@ -16,11 +16,11 @@
   roles:
     - clone-sample-images
 
-- name: clone custom images
+- name: prepare custom images
   hosts: "asz_server"
   remote_user: root
   roles:
-    - clone-custom-images
+    - prepare-custom-images
 
 - name: prepare osbuild
   hosts: "asz_server"

@@ -1,0 +1,27 @@
+---
+- name: clean existing custom-images
+  ansible.builtin.file:
+    path: "{{ custom_images_workdir }}"
+    state: absent
+
+- name: copy custom-images project in-place
+  ansible.builtin.copy:
+    src: "{{ local_custom_images }}/"
+    dest: "{{ custom_images_workdir }}"
+    local_follow: false
+    mode: preserve
+  ignore_errors: true
+  register: results
+
+- name: write log files
+  ansible.builtin.copy:
+    content: "{{ results }}"
+    dest: "./out/log.prepare_custom_images.txt"
+  delegate_to: localhost
+
+- name: error handler
+  ansible.builtin.debug:
+    var: results
+  failed_when: true
+  when:
+    results is failed

@@ -2,7 +2,7 @@
 - name: decide make params
   set_fact:
     run_make_params:
-      IMAGEDIR: "{{ custom_images_path if custom_images_path is defined else '' }}"
+      IMAGEDIR: "{{ custom_images_workdir if custom_images_workdir is defined else '' }}"
 
 - name: run make
   become: yes

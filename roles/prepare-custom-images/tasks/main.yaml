@@ -1,0 +1,9 @@
+---
+- name: load variables
+  ansible.builtin.include_vars: ../../../config.yaml
+
+- include_tasks: clone_custom_images.yaml
+  when: local_custom_images is undefined and custom_images_git_url is defined
+
+- include_tasks: copy_custom_images.yaml
+  when: local_custom_images is defined

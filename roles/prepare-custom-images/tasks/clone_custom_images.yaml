@@ -1,0 +1,32 @@
+---
+- name: install git
+  ansible.builtin.package:
+    name: git
+    state: present
+  become: yes
+
+- name: clean existing custom-images
+  ansible.builtin.file:
+    path: "{{ custom_images_workdir }}"
+    state: absent
+
+- name: clone custom-images project
+  ansible.builtin.git:
+    repo: "{{ custom_images_git_url }}"
+    dest: "{{ custom_images_workdir }}"
+    version: "{{ custom_images_git_ref }}"
+  ignore_errors: true
+  register: results
+
+- name: write log files
+  ansible.builtin.copy:
+    content: "{{ results }}"
+    dest: "./out/log.prepare_custom_images.txt"
+  delegate_to: localhost
+
+- name: error handler
+  ansible.builtin.debug:
+    var: results
+  failed_when: true
+  when:
+    results is failed

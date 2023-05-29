@@ -1,5 +1,0 @@
----
-- name: load variables
-  ansible.builtin.include_vars: ../../../config.yaml
-
-- include_tasks: clone_custom_images.yaml
