@@ -1,5 +1,5 @@
 ---
-- name: Ensure the server is absent (remove if needed)
+- name: ensure the server is absent (remove if needed)
   hcloud_server:
-    name: my-server
+    name: "asz-server-{{ server_id }}"
     state: absent

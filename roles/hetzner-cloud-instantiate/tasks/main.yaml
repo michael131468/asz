@@ -2,14 +2,28 @@
 - name: load variables
   ansible.builtin.include_vars: ../../../config.yaml
 
+# Prepare server id
+- name: prepare random server id
+  ansible.builtin.set_fact:
+    server_id: "{{ lookup('community.general.random_string', length=4, special=false) }}"
+
+- name: debug server id
+  ansible.builtin.debug:
+    msg: "server id: {{ server_id }}"
+
 # Instantiate hetzner server
 - include_tasks: instantiate_builder.yaml 
 
 - meta: refresh_inventory
 
-- name: wait_for_connection
-  wait_for_connection:
+- name: prepare ansible hosts group for playbook usage
+  ansible.builtin.add_host:
+    name: "asz-server-{{ server_id }}"
+    groups: "asz_server"
+
+- name: wait for connection
+  ansible.builtin.wait_for_connection:
     delay: 5
     timeout: 600
-  delegate_to: my-server
+  delegate_to: "asz-server-{{ server_id }}"
   remote_user: root
