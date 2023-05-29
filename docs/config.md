@@ -119,7 +119,7 @@ Automotive-SIG sample-images project.
 
   eg. `main`
 
-- `sample_images_path`
+- `sample_images_workdir`
 
   Specifies the local path to clone `sample_images_git_url` into.
 
@@ -131,7 +131,7 @@ Automotive-SIG sample-images project.
   assemblying the target image. This should typically not be changed as the
   defaults line up to the standard operation for the Makefile.
 
-  eg. `{{ sample_images_path }}/osbuild-manifests/_build`
+  eg. `{{ sample_images_workdir }}/osbuild-manifests/_build`
 
 [3]: https://sigs.centos.org/automotive/building/#building-in-a-virtual-machine
 

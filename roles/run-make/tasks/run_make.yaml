@@ -7,7 +7,7 @@
 - name: run make
   become: yes
   make:
-    chdir: "{{ sample_images_path }}/osbuild-manifests"
+    chdir: "{{ sample_images_workdir }}/osbuild-manifests"
     target: "{{ target_image }}.{{ target_arch }}.{{ target_filetype }}"
     params: "{{ run_make_params|dict2items|rejectattr('value', 'equalto', '')|list|items2dict }}"
   ignore_errors: true
@@ -16,7 +16,7 @@
 - name: Write log files
   copy:
     content: |
-      chdir: {{ sample_images_path }}/osbuild-manifests
+      chdir: {{ sample_images_workdir }}/osbuild-manifests
       target: {{ target_image }}.{{ target_arch }}.{{ target_filetype }}
       params: {{ run_make_params|dict2items|rejectattr('value', 'equalto', '')|list|items2dict }}
       {{ results.stdout }}
@@ -32,7 +32,7 @@
 
 - name: gather output (image)
   fetch:
-    src: "{{ sample_images_path }}/osbuild-manifests/{{ target_image }}.{{ target_arch }}.{{ target_filetype }}"
+    src: "{{ sample_images_workdir }}/osbuild-manifests/{{ target_image }}.{{ target_arch }}.{{ target_filetype }}"
     dest: "./out/"
     flat: yes
 

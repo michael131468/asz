@@ -1,0 +1,27 @@
+---
+- name: clean existing sample-images
+  ansible.builtin.file:
+    path: "{{ sample_images_workdir }}"
+    state: absent
+
+- name: copy sample-images project in-place
+  ansible.builtin.copy:
+    src: "{{ local_sample_images }}/"
+    dest: "{{ sample_images_workdir }}"
+    local_follow: false
+    mode: preserve
+  ignore_errors: true
+  register: results
+
+- name: write log files
+  ansible.builtin.copy:
+    content: "{{ results }}"
+    dest: "./out/log.prepare_sample_images.txt"
+  delegate_to: localhost
+
+- name: error handler
+  ansible.builtin.debug:
+    var: results
+  failed_when: true
+  when:
+    results is failed
