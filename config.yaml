@@ -14,6 +14,10 @@ custom_images_workdir: "{{ ansible_env.HOME }}/zeppelin/custom-images"
 # Leave undefined to clone from custom_images_git_url
 # local_custom_images: "{{ ansible_env.HOME }}/custom-images"
 
+# Force to use local copy of sample-images
+# Leave undefined to clone from sample_images_git_url
+# local_sample_images: "{{ ansible_env.HOME }}/sample-images"
+
 # == Advanced configuration ==
 osbuild_vmimages_download_baseurl: "https://autosd.sig.centos.org/AutoSD-9/nightly/osbuildvm-images"
 
@@ -29,8 +33,8 @@ osbuild_packages:
 
 sample_images_git_url: "https://gitlab.com/CentOS/automotive/sample-images.git"
 sample_images_git_ref: "main"
-sample_images_path: "{{ ansible_env.HOME }}/sample-images"
-sample_images_build_path: "{{ sample_images_path }}/osbuild-manifests/_build"
+sample_images_workdir: "{{ ansible_env.HOME }}/zeppelin/sample-images"
+sample_images_build_path: "{{ sample_images_workdir }}/osbuild-manifests/_build"
 
 # Hetzner Cloud configuration
 hcloud_aarch64_server_type: "cax21"

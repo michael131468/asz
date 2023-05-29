@@ -3,3 +3,7 @@
   ansible.builtin.include_vars: ../../../config.yaml
 
 - include_tasks: clone_sample_images.yaml
+  when: local_sample_images is undefined
+
+- include_tasks: copy_sample_images.yaml
+  when: local_sample_images is defined

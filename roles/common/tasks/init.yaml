@@ -14,7 +14,7 @@
     echo "osbuild_packages: {{ osbuild_packages }}"
     echo "sample_images_git_url: {{ sample_images_git_url }}"
     echo "sample_images_git_ref: {{ sample_images_git_ref }}"
-    echo "sample_images_path: {{ sample_images_path }}"
+    echo "sample_images_workdir: {{ sample_images_workdir }}"
     echo "sample_images_build_path: {{ sample_images_build_path }}"
   ignore_errors: true
   register: results

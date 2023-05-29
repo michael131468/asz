@@ -10,11 +10,11 @@
   roles:
     - common
 
-- name: clone sample images
+- name: prepare sample images
   hosts: "asz_server"
   remote_user: root
   roles:
-    - clone-sample-images
+    - prepare-sample-images
 
 - name: prepare custom images
   hosts: "asz_server"
