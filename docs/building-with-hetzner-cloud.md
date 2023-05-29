@@ -58,6 +58,10 @@ You can run a build with Hetzner cloud by invoking `ansible-playbook` on the
 ansible-playbook -i inventories/hetzner-cloud/hcloud.yaml hetzner-cloud.yaml
 ```
 
+The playbook will create a new server instance with the required architecture
+and configured system image (with a randomised name), run the operations on
+said machine, and delete/clean up the instance on finishing.
+
 The results of the build (on success) can be found in the `out` directory
 (created in the current working directory). See the [Outputs section](#Output-Directory)
 below for more details on the output contents.

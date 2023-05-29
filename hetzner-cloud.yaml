@@ -5,31 +5,31 @@
     - hetzner-cloud-instantiate
 
 - name: initiate build
-  hosts: my-server
+  hosts: "asz_server"
   remote_user: root
   roles:
     - common
 
 - name: clone sample images
-  hosts: my-server
+  hosts: "asz_server"
   remote_user: root
   roles:
     - clone-sample-images
 
 - name: clone custom images
-  hosts: my-server
+  hosts: "asz_server"
   remote_user: root
   roles:
     - clone-custom-images
 
 - name: prepare osbuild
-  hosts: my-server
+  hosts: "asz_server"
   remote_user: root
   roles:
     - prepare-osbuild
 
 - name: run make
-  hosts: my-server
+  hosts: "asz_server"
   remote_user: root
   roles:
     - run-make
