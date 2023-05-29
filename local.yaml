@@ -9,10 +9,10 @@
   roles:
     - clone-sample-images
 
-- name: clone custom images
+- name: prepare custom images
   hosts: localhost
   roles:
-    - clone-custom-images
+    - prepare-custom-images
 
 - name: prepare osbuild
   hosts: localhost

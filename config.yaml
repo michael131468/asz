@@ -8,7 +8,11 @@ target_filetype: img
 
 custom_images_git_url: "https://gitlab.com/redhat/edge/ci-cd/pipe-x/custom-images.git"
 custom_images_git_ref: "main"
-custom_images_path: "{{ ansible_env.HOME }}/custom-images"
+custom_images_workdir: "{{ ansible_env.HOME }}/zeppelin/custom-images"
+
+# Force to use local copy of custom-images
+# Leave undefined to clone from custom_images_git_url
+# local_custom_images: "{{ ansible_env.HOME }}/custom-images"
 
 # == Advanced configuration ==
 osbuild_vmimages_download_baseurl: "https://autosd.sig.centos.org/AutoSD-9/nightly/osbuildvm-images"

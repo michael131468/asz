@@ -59,11 +59,16 @@ sample-images Makefile][2].
 
   eg. `main`
 
-- `custom_images_path`
+- `custom_images_workdir`
 
   Specifies the local path to clone `custom_images_git_url` into.
 
   eg. `{{ ansible_env.HOME }}/custom-images`
+
+- `local_custom_images`
+
+  Specifies a local directory to use as a source for the custom-images instead
+  of cloning the git repo specified in `custom_images_git_url`.
 
 # Advanced Configuration
 
