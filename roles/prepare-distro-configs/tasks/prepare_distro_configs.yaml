@@ -1,0 +1,27 @@
+---
+- name: Preparing distro config file
+  ansible.builtin.debug:
+    var: item
+
+- name: Touch distro config file
+  ansible.builtin.file:
+    path: "{{ sample_images_workdir }}/osbuild-manifests/distro/{{ item.distro_name }}.ipp.yml"
+    state: "touch"
+
+- name: Read existing distro config yaml
+  ansible.builtin.slurp:
+    src: "{{ sample_images_workdir }}/osbuild-manifests/distro/{{ item.distro_name }}.ipp.yml"
+  register: slurped_yaml
+
+- name: Calculate updated distro config yaml
+  ansible.builtin.set_fact:
+    updated_yaml: |
+      {% set old_dict = slurped_yaml.content | b64decode | from_yaml %}
+      {% set new_dict = {"mpp-vars": item, "version": "2"} %}
+      {{ old_dict | ansible.builtin.combine(new_dict, list_merge="append_rp", recursive=true) }}
+
+- name: Write updated distro config yaml
+  ansible.builtin.copy:
+    content: "{{ updated_yaml | to_nice_yaml(indent=2, width=1337) }}"
+    dest: "{{ sample_images_workdir }}/osbuild-manifests/distro/{{ item.distro_name }}.ipp.yml"
+

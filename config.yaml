@@ -18,6 +18,24 @@ custom_images_workdir: "{{ ansible_env.HOME }}/zeppelin/custom-images"
 # Leave undefined to clone from sample_images_git_url
 # local_sample_images: "{{ ansible_env.HOME }}/sample-images"
 
+# == Project configurations ==
+distros:
+  - distro_name: cs9
+    extra_var: "Helloworld!"
+  - distro_name: autosd9
+    distro_version: 9
+    distro_baseurl: https://autosd.sig.centos.org/AutoSD-9/nightly/repos/AutoSD/compose/
+    distro_repos:
+      - id: autosd
+        baseurl: $distro_baseurl/AutoSD/$arch/os/
+    distro_devel_repos: []
+    distro_debug_repos:
+      - id: autosd-debug
+        baseurl: $distro_baseurl/AutoSD/$arch/debug/tree/
+    distro_module_id: platform:el9
+    release_rpm: "centos-stream-release"
+    linux_firmware_rpm: "linux-firmware"
+
 # == Advanced configuration ==
 osbuild_vmimages_download_baseurl: "https://autosd.sig.centos.org/AutoSD-9/nightly/osbuildvm-images"
 
