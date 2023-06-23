@@ -22,6 +22,11 @@
   roles:
     - prepare-custom-images
 
+- name: prepare distro configs
+  hosts: localhost
+  roles:
+    - prepare-distro-configs
+
 - name: prepare osbuild
   hosts: "asz_server"
   remote_user: root
