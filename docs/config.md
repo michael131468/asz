@@ -1,9 +1,11 @@
 # Configuration YAML
 
 Zeppelin is configured via a config.yaml file in the base directory. The file
-is split into two sections, basic and advanced configuration. Typically you
-only want to modify the basic section to begin building and you only need to
-modify the advanced configuration to tune the build process.
+is split into three sections, basic, project, and advanced configuration.
+Typically you only want to modify the basic section to begin building. Later one
+would dig deeper and need to modify the project configuration to customise the
+build targets. And finally one might need to modify the advanced configuration
+to tune the build process (to use custom repositories, etc).
 
 This document explains the different configuration tuning variables in the
 config.yaml.
@@ -70,6 +72,21 @@ sample-images Makefile][2].
   Specifies a local directory to use as a source for the custom-images instead
   of cloning the git repo specified in `custom_images_git_url`.
 
+# Project Configurations
+
+- `distros`
+
+  Specifies a list of dictionaries to configure the distro files in the
+  `sample-images` project. Each dictionary must define the `distro_name` key
+  to indicate which distro file is to be injected/updated. The dictionary
+  contents are outputted under the `mpp-vars` keys in the output file (see the
+  [default cs9 distro file][3] to understand further).
+
+  If the distro file already exists and has content, the existing content is
+  updated by merging the new values on top (leaving the old content in place).
+
+[3]: https://gitlab.com/CentOS/automotive/sample-images/-/blob/main/osbuild-manifests/distro/cs9.ipp.yml
+
 # Advanced Configuration
 
 These configuration parameters are configured with sane defaults to get started
@@ -83,7 +100,7 @@ Automotive-SIG sample-images project.
   from. This is needed for cross-arch assembly (eg. building aarch64 images on
   x86_64 hosts).
 
-  More information about osbuild-vmimages can be found [here][3].
+  More information about osbuild-vmimages can be found [here][4].
 
 - `osbuild_packages`
 
@@ -133,7 +150,7 @@ Automotive-SIG sample-images project.
 
   eg. `{{ sample_images_workdir }}/osbuild-manifests/_build`
 
-[3]: https://sigs.centos.org/automotive/building/#building-in-a-virtual-machine
+[4]: https://sigs.centos.org/automotive/building/#building-in-a-virtual-machine
 
 ## Advanced Configration: Hetzner Cloud Configuration
 
