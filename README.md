@@ -41,6 +41,25 @@ this choice of architecture includes:
 - it allows for having one "method" definition that can run both locally or
   remotely with minimal code changes
 
+## Requirements
+
+Since Zeppelin is based on Ansible, you must have it installed on the computer
+that starts the build process (aka your personal computer). Typically you can
+install Ansible with pip.
+
+```
+python3 -m pip install --user ansible
+```
+
+You can find out more [here][4] on how to install it.
+
+In addition to having installed ansible, you need the [community.general
+Ansible collection][5] installed also.
+
+```
+ansible-galaxy collection install community.general
+```
+
 ## Configuration
 
 The build host and system-image target build configuration is defined in
@@ -62,25 +81,6 @@ refer to their documentation for details.
 
 In the future there will be a simple `configure.sh` to help generate this
 configuration yaml.
-
-## Requirements
-
-Since Zeppelin is based on Ansible, you must have it installed on the computer
-that starts the build process (aka your personal computer). Typically you can
-install Ansible with pip.
-
-```
-python3 -m pip install --user ansible
-```
-
-You can find out more [here][4] on how to install it.
-
-In addition to having installed ansible, you need the [community.general
-Ansible collection][5] installed also.
-
-```
-ansible-galaxy collection install community.general
-```
 
 ## Usage
 
