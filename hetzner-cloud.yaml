@@ -23,7 +23,8 @@
     - prepare-custom-images
 
 - name: prepare distro configs
-  hosts: localhost
+  hosts: "asz_server"
+  remote_user: root
   roles:
     - prepare-distro-configs
 
