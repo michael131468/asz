@@ -27,15 +27,6 @@
   ignore_errors: true
   register: results_copr_osbuild
 
-- name: Enable ostree-compliance-mode copr
-  become: yes
-  community.general.copr:
-    state: enabled
-    name: 'ecurtin/osbuildtest-ostree-compliance-mode'
-    chroot: "{{ 'epel-9-'+ansible_architecture if ansible_distribution == 'RedHat' else omit }}"
-  ignore_errors: true
-  register: results_copr_ostree_compliance_mode
-
 - name: Enable osbuild-aboot copr
   become: yes
   community.general.copr:
@@ -54,6 +45,15 @@
   ignore_errors: true
   register: results_copr_abootimg
 
+- name: Add Automotive-SIG repository
+  ansible.builtin.yum_repository:
+    name: automotive-sig
+    description: Automotive-SIG Repo
+    baseurl: https://mirror.stream.centos.org/SIGs/9-stream/automotive/$basearch/packages-main/
+    gpgcheck: false
+  ignore_errors: true
+  register: results_repo_automotive_sig
+
 - name: Calculating dependencies
   set_fact:
     osbuild_dependencies:
@@ -63,7 +63,7 @@
       - "{{ osbuild_packages | selectattr('package', 'match', 'osbuild') | map(attribute='value') | first }}"
       - "{{ osbuild_packages | selectattr('package', 'match', 'osbuild-tools') | map(attribute='value') | first }}"
       - "{{ osbuild_packages | selectattr('package', 'match', 'osbuild-ostree') | map(attribute='value') | first }}"
-      - "{{ osbuild_packages | selectattr('package', 'match', 'osbuildtest-ostree-compliance-mode') | map(attribute='value') | first }}"
+      - "{{ osbuild_packages | selectattr('package', 'match', 'osbuild-auto') | map(attribute='value') | first }}"
 
 - name: Install dependencies
   become: yes
@@ -102,10 +102,6 @@
       ===============================
       {{ results_copr_osbuild }}
 
-      Enabling Copr: ecurtin/osbuildtest-ostree-compliance-mode
-      =========================================================
-      {{ results_copr_ostree_compliance_mode }}
-
       Enabling Copr: alexl/osbuild-aboot
       ==================================
       {{ results_copr_osbuild_aboot }}
@@ -113,6 +109,10 @@
       Enabling Copr: alexl/abootimg
       =============================
       {{ results_copr_abootimg }}
+
+      Enabling Repo: automotive-sig
+      =========================================================
+      {{ results_repo_automotive_sig }}
 
       Calculating dependencies
       ========================
@@ -137,8 +137,8 @@
      results_init is failed or
      results_build_dir is failed or
      results_copr_osbuild is failed or
-     results_copr_ostree_compliance_mode is failed or
      results_copr_osbuild_aboot is failed or
      results_copr_abootimg is failed or
+     results_repo_automotive_sig is failed or
      results_install_deps is failed or
      results_download_vm is failed

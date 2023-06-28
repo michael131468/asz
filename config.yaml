@@ -46,8 +46,8 @@ osbuild_packages:
     value: "osbuild-tools"
   - package: "osbuild-ostree"
     value: "osbuild-ostree"
-  - package: "osbuildtest-ostree-compliance-mode"
-    value: "osbuildtest-ostree-compliance-mode"
+  - package: "osbuild-auto"
+    value: "osbuild-auto"
 
 sample_images_git_url: "https://gitlab.com/CentOS/automotive/sample-images.git"
 sample_images_git_ref: "main"
