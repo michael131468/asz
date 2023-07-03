@@ -20,26 +20,46 @@ assemble system-images (with OSBuild). This build system supports configuration
 via both command line parameters and custom yaml snippet files that extend /
 overwrite the default image configuration.
 
-The aim of Zeppelin is to add (yet another) abstraction layer to run that
+The aim of Zeppelin is to add (yet another) abstraction layer to operate that
 Makefile-based build system with the intended benefits of simplifying the
 management of the configurations and abstracting out the host builder set up
 (allowing you to transparently build in the cloud or locally with no change in
 the build-system entrypoint).
 
 For now, Zeppelin aims to focus on building with the [Hetzner Cloud][2]. Support
-for more cloud providers will be added in the future.
+for more cloud providers and other potential build hosts will be added in the
+future.
 
 ## How It Works
 
-Zeppelin is actually a simple set of Ansible playbooks and roles with a
-configuration file to control the build process. The choice to use Ansible
-may seem limiting compared to a programmable build script but the reasoning for
-this choice of architecture includes:
+Zeppelin is a simple set of Ansible playbooks and roles with a configuration
+file to control the build process. The playbooks are run on an Ansible host
+machine (typically the developer machine). The playbooks can set up a build
+host machine (eg. instantiate a machine in Hetzner Cloud), run the build
+instructions remotely on the build host machine, and gather the output files
+back to the Ansible Host local filesystem.
 
-- it allows re-using the "builtin" playbooks and roles to simplfy the build
-  host preparation
-- it allows for having one "method" definition that can run both locally or
-  remotely with minimal code changes
+![zeppelin-diagram](/docs/images/zeppelin-diagram.png)
+
+This is a workflow which on the surface appears like a developer is running the
+system images assembly locally when actually it will transparently be processed
+in the cloud.
+
+While the main example case is using the cloud as a source of build hosts,
+the build host could also be the local Ansible host itself or another available
+networked machine like a Raspberry Pi. Any host that Ansible can provision,
+set up, and use to execute build instructions is viable with Zeppelin.
+
+The Ansible host machine also need not always be the developer machine. Another
+use case of Zeppelin is running system-image assembly in a CI/CD workflow. There
+the Ansible host machine would be the pipeline runner that executes the CI/CD
+workflow (eg. GitHub runner). This could be useful to avoid needing Arm64
+machines in the pipeline execution (which for example is not available
+as a public GitHub runners) and aligning CI workflows with developer workflows.
+
+<a href="https://www.flaticon.com/free-icons/productivity" title="productivity icons">Productivity icons created by vectorsmarket15 - Flaticon</a>
+
+<a href="https://www.flaticon.com/free-icons/server" title="server icons">Server icons created by vectorsmarket15 - Flaticon</a>
 
 ## Requirements
 
