@@ -1,6 +1,8 @@
 ---
 - name: decide make params
   set_fact:
+    output_image_basename: "{{ target_image }}.{{ target_arch }}.{{ target_filetype }}"
+    output_image_name: "{{ target_image }}.{{ target_arch }}.{{ target_filetype }}{{ '' if target_compression is undefined else '.'+target_compression }}"
     run_make_params:
       IMAGEDIR: "{{ custom_images_workdir if custom_images_workdir is defined else '' }}"
 
@@ -30,9 +32,18 @@
   when:
      results is failed
 
+- name: compress output (image)
+  community.general.archive:
+    path: "{{ sample_images_workdir }}/osbuild-manifests/{{ output_image_basename }}"
+    dest: "{{ sample_images_workdir }}/osbuild-manifests/{{ output_image_name }}"
+    format: "{{ target_compression }}"
+    remove: true
+  when:
+    target_compression is defined
+
 - name: gather output (image)
   fetch:
-    src: "{{ sample_images_workdir }}/osbuild-manifests/{{ target_image }}.{{ target_arch }}.{{ target_filetype }}"
+    src: "{{ sample_images_workdir }}/osbuild-manifests/{{ output_image_name }}"
     dest: "./out/"
     flat: yes
 
