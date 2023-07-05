@@ -6,6 +6,10 @@ target_image: cs9-qemu-qa-ostree
 target_arch: x86_64
 target_filetype: img
 
+# (optional) Compress resulting system image file with specified compression
+# Leave undefined to have no compression performed
+# target_compression: gz
+
 custom_images_git_url: "https://gitlab.com/redhat/edge/ci-cd/pipe-x/custom-images.git"
 custom_images_git_ref: "main"
 custom_images_workdir: "{{ ansible_env.HOME }}/zeppelin/custom-images"

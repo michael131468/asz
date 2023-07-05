@@ -46,6 +46,20 @@ sample-images Makefile][2].
 
   eg. qcow2
 
+- `target_compression`
+
+  Optionally specifies a compression format for the output image file. This
+  allows for compressing the image immediately after creation to save space
+  and bandwidth when transferring.
+
+  Supported values include:
+    - bz2
+    - gz
+    - xz
+    - zip
+
+  eg. `gz`
+
 - `custom_images_git_url`
 
   Optionally specifies a secondary git repository to clone into the host system
