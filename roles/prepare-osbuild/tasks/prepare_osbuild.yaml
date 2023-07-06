@@ -46,6 +46,7 @@
   register: results_copr_abootimg
 
 - name: Add Automotive-SIG repository
+  become: yes
   ansible.builtin.yum_repository:
     name: automotive-sig
     description: Automotive-SIG Repo
