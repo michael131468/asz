@@ -28,3 +28,8 @@
   hosts: localhost
   roles:
     - run-make
+
+- name: run make for osbuildvm-images
+  hosts: localhost
+  roles:
+    - run-make-osbuildvm
