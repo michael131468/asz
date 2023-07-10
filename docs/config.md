@@ -120,13 +120,13 @@ with running Zeppelin. You should only modify these values when intending to
 force Zeppelin to build with custom resources such as a fork of the
 Automotive-SIG sample-images project.
 
-- `osbuild_vmimages_download_baseurl`
+- `osbuildvm_images_download_baseurl`
 
   This parameter directs where Zeppelin should download the osbuildvm-images
   from. This is needed for cross-arch assembly (eg. building aarch64 images on
   x86_64 hosts).
 
-  More information about osbuild-vmimages can be found [here][4].
+  More information about osbuildvm-images can be found [here][4].
 
 - `osbuild_packages`
 
