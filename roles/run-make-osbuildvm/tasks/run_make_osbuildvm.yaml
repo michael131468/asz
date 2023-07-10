@@ -1,0 +1,44 @@
+---
+- name: run make for osbuildvm-images
+  become: yes
+  make:
+    chdir: "{{ sample_images_workdir }}/osbuild-manifests"
+    target: "osbuildvm-images"
+  ignore_errors: true
+  register: results
+
+- name: Write log files for osbuildvm-images operations
+  copy:
+    content: |
+      chdir: {{ sample_images_workdir }}/osbuild-manifests
+      target: osbuildvm-images
+      {{ results.stdout }}
+    dest: "./out/log.run_make_vmimages.txt"
+  delegate_to: localhost
+
+- name: Error handler
+  debug:
+     var: results
+  failed_when: true
+  when:
+     results is failed
+
+- name: probe results for osbuildvm-images
+  ansible.builtin.find:
+    paths: "{{ sample_images_workdir }}/osbuild-manifests/_build/"
+    recurse: no
+    patterns: ["osbuildvm-*"]
+  register: osbuildvm_images_files
+
+- name: Prepare output directory for osbuildvm-images
+  ansible.builtin.file:
+    path: "./out/osbuildvm-images"
+    state: directory
+  delegate_to: localhost
+
+- name: gather output (osbuildvm-images)
+  ansible.builtin.fetch:
+    src: "{{ item.path }}"
+    dest: "./out/osbuildvm-images/"
+    flat: yes
+  with_items: "{{ osbuildvm_images_files.files }}"

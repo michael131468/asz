@@ -40,6 +40,12 @@
   roles:
     - run-make
 
+- name: run make for osbuildvm-images
+  hosts: "asz_server"
+  remote_user: root
+  roles:
+    - run-make-osbuildvm
+
 - name: teardown-builder
   hosts: localhost
   roles:

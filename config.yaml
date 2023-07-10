@@ -22,6 +22,11 @@ custom_images_workdir: "{{ ansible_env.HOME }}/zeppelin/custom-images"
 # Leave undefined to clone from sample_images_git_url
 # local_sample_images: "{{ ansible_env.HOME }}/sample-images"
 
+# (optional) Enable building osbuildvm-images
+# Leave undefined or set to false to disable
+# Resulting VM architecture is based on the build host
+# osbuildvm_images_build: yes
+
 # == Project configurations ==
 distros:
   - distro_name: cs9

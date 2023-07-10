@@ -1,0 +1,6 @@
+---
+- name: load variables
+  ansible.builtin.include_vars: ../../../config.yaml
+
+- include_tasks: run_make_osbuildvm.yaml
+  when: osbuildvm_images_build|default(false)|bool == true
