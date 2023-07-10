@@ -86,6 +86,13 @@ sample-images Makefile][2].
   Specifies a local directory to use as a source for the custom-images instead
   of cloning the git repo specified in `custom_images_git_url`.
 
+- `osbuildvm_images_build`
+
+  Toggles on the building of osbuildvm images. A truthful value is the on state
+  and the undefined or falsey value is the off state.
+
+  eg. `yes`
+
 # Project Configurations
 
 - `distros`
