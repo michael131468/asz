@@ -46,7 +46,7 @@ distros:
     linux_firmware_rpm: "linux-firmware"
 
 # == Advanced configuration ==
-osbuild_vmimages_download_baseurl: "https://autosd.sig.centos.org/AutoSD-9/nightly/osbuildvm-images"
+osbuildvm_images_download_baseurl: "https://autosd.sig.centos.org/AutoSD-9/nightly/osbuildvm-images"
 
 osbuild_packages:
   - package: "osbuild"
