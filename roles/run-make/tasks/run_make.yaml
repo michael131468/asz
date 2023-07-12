@@ -6,7 +6,7 @@
     run_make_params:
       IMAGEDIR: "{{ custom_images_workdir if custom_images_workdir is defined else '' }}"
 
-- name: run make
+- name: run make for target image
   become: yes
   make:
     chdir: "{{ sample_images_workdir }}/osbuild-manifests"
@@ -32,6 +32,14 @@
   when:
      results is failed
 
+- name: create target image manifest
+  ansible.builtin.shell: >
+    cat "{{ sample_images_build_path }}/{{ target_image }}.{{ target_arch }}.json"
+    | jq '.sources["org.osbuild.curl"].items | to_entries[] | .value'
+    | xargs -n 1 basename
+    | sort -u
+    > "{{ sample_images_workdir }}/osbuild-manifests/{{ output_image_basename }}.manifest"
+
 - name: compress output (image)
   community.general.archive:
     path: "{{ sample_images_workdir }}/osbuild-manifests/{{ output_image_basename }}"
@@ -50,5 +58,11 @@
 - name: gather output (osbuild json)
   fetch:
     src: "{{ sample_images_build_path }}/{{ target_image }}.{{ target_arch }}.json"
+    dest: "./out/"
+    flat: yes
+
+- name: gather output (image manifest)
+  fetch:
+    src: "{{ sample_images_workdir }}/osbuild-manifests/{{ output_image_basename }}.manifest"
     dest: "./out/"
     flat: yes
