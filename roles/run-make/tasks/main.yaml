@@ -3,4 +3,4 @@
   ansible.builtin.include_vars: ../../../config.yaml
 
 - include_tasks: run_make.yaml
-  when: target_image|default("")|length > 0
+  when: target_image|default(None)
