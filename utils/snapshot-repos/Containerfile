@@ -1,0 +1,8 @@
+FROM quay.io/centos/centos:stream9
+
+RUN dnf install -y 'dnf-command(reposync)'
+
+COPY snapshot.sh /usr/bin/snapshot.sh
+RUN chmod +x /usr/bin/snapshot.sh
+
+ENTRYPOINT ["/usr/bin/snapshot.sh"]
