@@ -65,6 +65,7 @@
       - "{{ osbuild_packages | selectattr('package', 'match', 'osbuild-tools') | map(attribute='value') | first }}"
       - "{{ osbuild_packages | selectattr('package', 'match', 'osbuild-ostree') | map(attribute='value') | first }}"
       - "{{ osbuild_packages | selectattr('package', 'match', 'osbuild-auto') | map(attribute='value') | first }}"
+      - skopeo
 
 - name: Install dependencies
   become: yes
