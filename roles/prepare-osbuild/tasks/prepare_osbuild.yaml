@@ -58,6 +58,7 @@
 - name: Calculating dependencies
   set_fact:
     osbuild_dependencies:
+      - android-tools
       - abootimg
       - aboot-update
       - make
