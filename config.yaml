@@ -56,6 +56,13 @@ sample_images_git_ref: "main"
 sample_images_workdir: "{{ ansible_env.HOME }}/zeppelin/sample-images"
 sample_images_build_path: "{{ sample_images_workdir }}/osbuild-manifests/_build"
 
+# Enables s3 upload of output
+# Requires aws credentials set up via environment variables on the ansible
+# controller (which get forwarded to the host)
+s3_upload: no
+s3_upload_bucket: "upload-bucket"
+s3_upload_prefix: "upload-prefix"
+
 # Hetzner Cloud configuration
 hcloud_aarch64_server_type: "cax21"
 hcloud_aarch64_image: "centos-stream-9"

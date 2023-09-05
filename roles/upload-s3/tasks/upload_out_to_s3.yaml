@@ -1,0 +1,55 @@
+---
+# Check that the required AWS credentials are available in environment variable
+# form
+# TODO: support STS tokens
+- name: check AWS_ACCESS_KEY_ID
+  ansible.builtin.fail:
+    msg: "Variable 'AWS_ACCESS_KEY_ID' is not defined"
+  when: "{{ lookup('ansible.builtin.env', 'AWS_ACCESS_KEY_ID', default='') }}" == "" 
+
+- name: check AWS_SECRET_ACCESS_KEY
+  ansible.builtin.fail:
+    msg: "Variable 'AWS_SECRET_ACCESS_KEY' is not defined"
+  when: "{{ lookup('ansible.builtin.env', 'AWS_SECRET_ACCESS_KEY', default='') }}" == "" 
+
+- name: check AWS_DEFAULT_REGION
+  ansible.builtin.fail:
+    msg: "Variable 'AWS_DEFAULT_REGION' is not defined"
+  when: "{{ lookup('ansible.builtin.env', 'AWS_DEFAULT_REGION', default='') }}" == "" 
+
+# Upload output of make
+- name: upload output
+  community.aws.s3_sync:
+    bucket: "{{ s3_upload_bucket }}"
+    key_prefix: "{{ s3_upload_prefix }}"
+    file_root: "{{ item.path }}"
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ lookup('ansible.builtin.env', 'AWS_ACCESS_KEY_ID', default='') }}"
+    AWS_SECRET_ACCESS_KEY: "{{ lookup('ansible.builtin.env', 'AWS_SECRET_ACCESS_KEY', default='') }}"
+    AWS_DEFAULT_REGION: "{{ lookup('ansible.builtin.env', 'AWS_DEFAULT_REGION', default='') }}"
+  with_items:
+    - "{{ sample_images_workdir }}/osbuild-manifests/{{ output_image_name }}"
+    - "{{ sample_images_build_path }}/{{ target_image }}.{{ target_arch }}.json"
+    - "{{ sample_images_build_path }}/{{ target_image }}.{{ target_arch }}.json"
+  when: target_image|default(None)
+
+# Upload output of make-osbuildvm
+- name: probe results for osbuildvm-images
+  ansible.builtin.find:
+    paths: "{{ sample_images_workdir }}/osbuild-manifests/_build/"
+    recurse: no
+    patterns: ["osbuildvm-*"]
+  register: osbuildvm_images_files
+  when: osbuildvm_images_build|default(false)|bool == true
+
+- name: upload output (osbuildvm-images)
+  community.aws.s3_sync:
+    bucket: "{{ s3_upload_bucket }}"
+    key_prefix: "{{ s3_upload_prefix }}"
+    file_root: "{{ item.path }}"
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ lookup('ansible.builtin.env', 'AWS_ACCESS_KEY_ID', default='') }}"
+    AWS_SECRET_ACCESS_KEY: "{{ lookup('ansible.builtin.env', 'AWS_SECRET_ACCESS_KEY', default='') }}"
+    AWS_DEFAULT_REGION: "{{ lookup('ansible.builtin.env', 'AWS_DEFAULT_REGION', default='') }}"
+  with_items: "{{ osbuildvm_images_files.files }}"
+  when: osbuildvm_images_build|default(false)|bool == true

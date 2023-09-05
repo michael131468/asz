@@ -1,0 +1,6 @@
+---
+- name: load variables
+  ansible.builtin.include_vars: ../../../config.yaml
+
+- include_tasks: upload_out_to_s3.yaml
+  when: s3_upload|default(false)|bool == true
