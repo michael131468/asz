@@ -35,6 +35,7 @@
     path: "./out/osbuildvm-images"
     state: directory
   delegate_to: localhost
+  when: discard_results|default(false)|bool == false
 
 - name: gather output (osbuildvm-images)
   ansible.builtin.fetch:
@@ -42,3 +43,4 @@
     dest: "./out/osbuildvm-images/"
     flat: yes
   with_items: "{{ osbuildvm_images_files.files }}"
+  when: discard_results|default(false)|bool == false

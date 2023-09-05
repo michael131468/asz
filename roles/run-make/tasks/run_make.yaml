@@ -54,15 +54,18 @@
     src: "{{ sample_images_workdir }}/osbuild-manifests/{{ output_image_name }}"
     dest: "./out/"
     flat: yes
+  when: discard_results|default(false)|bool == false
 
 - name: gather output (osbuild json)
   fetch:
     src: "{{ sample_images_build_path }}/{{ target_image }}.{{ target_arch }}.json"
     dest: "./out/"
     flat: yes
+  when: discard_results|default(false)|bool == false
 
 - name: gather output (image manifest)
   fetch:
     src: "{{ sample_images_workdir }}/osbuild-manifests/{{ output_image_basename }}.manifest"
     dest: "./out/"
     flat: yes
+  when: discard_results|default(false)|bool == false

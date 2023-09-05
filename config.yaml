@@ -63,6 +63,11 @@ s3_upload: no
 s3_upload_bucket: "upload-bucket"
 s3_upload_prefix: "upload-prefix"
 
+# Turn off fetching the resulting files
+# Useful if the results were already uploaded by the worker to another location
+# and do not need to be fetched back to the Ansible host
+discard_results: false
+
 # Hetzner Cloud configuration
 hcloud_aarch64_server_type: "cax21"
 hcloud_aarch64_image: "centos-stream-9"
