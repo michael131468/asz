@@ -21,9 +21,15 @@
     name: "asz-server-{{ server_id }}"
     groups: "asz_server"
 
+- name: debug ansible host ip
+  ansible.builtin.debug:
+    msg: "{{ hostvars['asz-server-'+server_id].ansible_host }}"
+
 - name: wait for connection
-  ansible.builtin.wait_for_connection:
-    delay: 5
-    timeout: 600
-  delegate_to: "asz-server-{{ server_id }}"
+  ansible.builtin.wait_for:
+    port: 22
+    host: "{{ hostvars['asz-server-'+server_id].ansible_host }}"
+    delay: 30
+    connect_timeout: 60
+    timeout: 300
   remote_user: root
