@@ -1,0 +1,107 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  run-asz-with-hetzner-cloud-x86-64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "The ${{ github.repository }} repository was cloned."
+
+      - run: echo "Preparing controller"
+      - uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.HCLOUD_SSH_PRIVATE_KEY }}
+      - run: python3 -m pip -V
+      - run: python3 -m pip install --user ansible hcloud
+      - run: ansible-galaxy collection install community.general
+      - run: ansible-galaxy collection install hetzner.hcloud
+      - run: ansible-config init --disabled > "${{ github.workspace }}/ansible.cfg"
+      - run: echo "[ssh_connection]" >> "${{ github.workspace }}/ansible.cfg"
+      - run: echo "ssh_args = -o ServerAliveInterval=10 -o StrictHostKeyChecking=no" >> "${{ github.workspace }}/ansible.cfg"
+      - run: cp "${{ github.workspace }}/ci/run-asz-with-hetzner-cloud/hetzner-cloud.yaml" "${{ github.workspace }}/playbook.yaml"
+      - run: cp "${{ github.workspace }}/ci/run-asz-with-hetzner-cloud/config-x86_64.yaml" "${{ github.workspace }}/config.yaml"
+
+      - run: echo "Running playbook for x86_64"
+      - run: ansible-playbook -i "${{ github.workspace }}/inventories/hetzner-cloud/hcloud.yaml" "${{ github.workspace }}/playbook.yaml"
+        env:
+          HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
+
+  run-asz-with-hetzner-cloud-aarch64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "The ${{ github.repository }} repository was cloned."
+
+      - run: echo "Preparing controller"
+      - uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.HCLOUD_SSH_PRIVATE_KEY }}
+      - run: python3 -m pip -V
+      - run: python3 -m pip install --user ansible hcloud
+      - run: ansible-galaxy collection install community.general
+      - run: ansible-galaxy collection install hetzner.hcloud
+      - run: ansible-config init --disabled > "${{ github.workspace }}/ansible.cfg"
+      - run: echo "[ssh_connection]" >> "${{ github.workspace }}/ansible.cfg"
+      - run: echo "ssh_args = -o ServerAliveInterval=10 -o StrictHostKeyChecking=no" >> "${{ github.workspace }}/ansible.cfg"
+      - run: cp "${{ github.workspace }}/ci/run-asz-with-hetzner-cloud/hetzner-cloud.yaml" "${{ github.workspace }}/playbook.yaml"
+      - run: cp "${{ github.workspace }}/ci/run-asz-with-hetzner-cloud/config-aarch64.yaml" "${{ github.workspace }}/config.yaml"
+
+      - run: echo "Running playbook for aarch64"
+      - run: ansible-playbook -i "${{ github.workspace }}/inventories/hetzner-cloud/hcloud.yaml" "${{ github.workspace }}/playbook.yaml"
+        env:
+          HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
+
+  run-asz-with-hetzner-cloud-osbuildvm-x86_64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "The ${{ github.repository }} repository was cloned."
+
+      - run: echo "Preparing controller"
+      - uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.HCLOUD_SSH_PRIVATE_KEY }}
+      - run: python3 -m pip -V
+      - run: python3 -m pip install --user ansible hcloud
+      - run: ansible-galaxy collection install community.general
+      - run: ansible-galaxy collection install hetzner.hcloud
+      - run: ansible-config init --disabled > "${{ github.workspace }}/ansible.cfg"
+      - run: echo "[ssh_connection]" >> "${{ github.workspace }}/ansible.cfg"
+      - run: echo "ssh_args = -o ServerAliveInterval=10 -o StrictHostKeyChecking=no" >> "${{ github.workspace }}/ansible.cfg"
+      - run: cp "${{ github.workspace }}/ci/run-asz-with-hetzner-cloud/hetzner-cloud.yaml" "${{ github.workspace }}/playbook.yaml"
+      - run: cp "${{ github.workspace }}/ci/run-asz-with-hetzner-cloud/config-x86_64-osbuildvm.yaml" "${{ github.workspace }}/config.yaml"
+
+      - run: echo "Running playbook for aarch64"
+      - run: ansible-playbook -i "${{ github.workspace }}/inventories/hetzner-cloud/hcloud.yaml" "${{ github.workspace }}/playbook.yaml"
+        env:
+          HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
+
+  run-asz-with-hetzner-cloud-osbuildvm-aarch64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "The ${{ github.repository }} repository was cloned."
+
+      - run: echo "Preparing controller"
+      - uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.HCLOUD_SSH_PRIVATE_KEY }}
+      - run: python3 -m pip -V
+      - run: python3 -m pip install --user ansible hcloud
+      - run: ansible-galaxy collection install community.general
+      - run: ansible-galaxy collection install hetzner.hcloud
+      - run: ansible-config init --disabled > "${{ github.workspace }}/ansible.cfg"
+      - run: echo "[ssh_connection]" >> "${{ github.workspace }}/ansible.cfg"
+      - run: echo "ssh_args = -o ServerAliveInterval=10 -o StrictHostKeyChecking=no" >> "${{ github.workspace }}/ansible.cfg"
+      - run: cp "${{ github.workspace }}/ci/run-asz-with-hetzner-cloud/hetzner-cloud.yaml" "${{ github.workspace }}/playbook.yaml"
+      - run: cp "${{ github.workspace }}/ci/run-asz-with-hetzner-cloud/config-aarch64-osbuildvm.yaml" "${{ github.workspace }}/config.yaml"
+
+      - run: echo "Running playbook for aarch64"
+      - run: ansible-playbook -i "${{ github.workspace }}/inventories/hetzner-cloud/hcloud.yaml" "${{ github.workspace }}/playbook.yaml"
+        env:
+          HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}

@@ -2,17 +2,17 @@
 
 # == Basic configuration ==
 
-target_image: cs9-qemu-developer-regular
-target_arch: x86_64
-target_filetype: img
+target_image: autosd-qemu-developer-ostree
+target_arch: aarch64
+target_filetype: qcow2
 
 # (optional) Compress resulting system image file with specified compression
 # Leave undefined to have no compression performed
-# target_compression: gz
+target_compression: gz
 
-custom_images_git_url: "https://gitlab.com/redhat/edge/ci-cd/pipe-x/custom-images.git"
-custom_images_git_ref: "main"
-custom_images_workdir: "{{ ansible_env.HOME }}/zeppelin/custom-images"
+# custom_images_git_url: "https://gitlab.com/redhat/edge/ci-cd/pipe-x/custom-images.git"
+# custom_images_git_ref: "main"
+# custom_images_workdir: "{{ ansible_env.HOME }}/zeppelin/custom-images"
 
 # (optional) Force to use local copy of custom-images
 # Leave undefined to clone from custom_images_git_url
@@ -29,21 +29,8 @@ custom_images_workdir: "{{ ansible_env.HOME }}/zeppelin/custom-images"
 
 # == Project configurations ==
 distros:
-  - distro_name: cs9
+  - distro_name: autosd
     extra_var: "Helloworld!"
-  - distro_name: autosd9
-    distro_version: 9
-    distro_baseurl: https://autosd.sig.centos.org/AutoSD-9/nightly/repos/AutoSD/compose/
-    distro_repos:
-      - id: autosd
-        baseurl: $distro_baseurl/AutoSD/$arch/os/
-    distro_devel_repos: []
-    distro_debug_repos:
-      - id: autosd-debug
-        baseurl: $distro_baseurl/AutoSD/$arch/debug/tree/
-    distro_module_id: platform:el9
-    release_rpm: "centos-stream-release"
-    linux_firmware_rpm: "linux-firmware"
 
 # == Advanced configuration ==
 osbuildvm_images_download_baseurl: "https://autosd.sig.centos.org/AutoSD-9/nightly/osbuildvm-images"
@@ -68,10 +55,10 @@ hcloud_aarch64_server_type: "cax21"
 hcloud_aarch64_image: "centos-stream-9"
 hcloud_aarch64_location: "fsn1"
 hcloud_aarch64_ssh_keys:
-  - "michael@fedora"
+  - "ci@asz"
 
 hcloud_x86_64_server_type: "cx21"
 hcloud_x86_64_image: "centos-stream-9"
 hcloud_x86_64_location: "fsn1"
 hcloud_x86_64_ssh_keys:
-  - "michael@fedora"
+  - "ci@asz"
