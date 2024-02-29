@@ -10,6 +10,10 @@ target_filetype: img
 # Leave undefined to have no compression performed
 # target_compression: gz
 
+# (optional) Set up custom-images repository alongside sample-images for
+# external image mpp files (aka IMAGEDIR variable). More information at:
+# https://gitlab.com/CentOS/automotive/sample-images/-/blob/main/osbuild-manifests/Makefile?ref_type=heads#L74
+# Leave undefined to skip
 custom_images_git_url: "https://gitlab.com/redhat/edge/ci-cd/pipe-x/custom-images.git"
 custom_images_git_ref: "main"
 custom_images_workdir: "{{ ansible_env.HOME }}/zeppelin/custom-images"
