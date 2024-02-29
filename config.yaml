@@ -2,7 +2,7 @@
 
 # == Basic configuration ==
 
-target_image: cs9-qemu-qa-ostree
+target_image: cs9-qemu-developer-regular
 target_arch: x86_64
 target_filetype: img
 
