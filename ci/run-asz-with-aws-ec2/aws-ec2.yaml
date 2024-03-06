@@ -1,0 +1,52 @@
+---
+- name: instantiate-builder
+  hosts: localhost
+  roles:
+    - aws-ec2-instantiate
+
+- name: initiate build
+  hosts: "asz_server"
+  remote_user: ec2-user
+  roles:
+    - common
+
+- name: prepare sample images
+  hosts: "asz_server"
+  remote_user: ec2-user
+  roles:
+    - prepare-sample-images
+
+- name: prepare custom images
+  hosts: "asz_server"
+  remote_user: ec2-user
+  roles:
+    - prepare-custom-images
+
+- name: prepare distro configs
+  hosts: "asz_server"
+  remote_user: ec2-user
+  roles:
+    - prepare-distro-configs
+
+- name: prepare osbuild
+  hosts: "asz_server"
+  remote_user: ec2-user
+  roles:
+    - prepare-osbuild
+
+- name: run make
+  hosts: "asz_server"
+  remote_user: ec2-user
+  roles:
+    - run-make
+
+- name: run make for osbuildvm-images
+  hosts: "asz_server"
+  remote_user: ec2-user
+  roles:
+    - run-make-osbuildvm
+
+- name: teardown-builder
+  hosts: localhost
+  roles:
+    - aws-ec2-teardown
