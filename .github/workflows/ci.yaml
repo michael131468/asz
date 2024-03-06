@@ -105,3 +105,55 @@ jobs:
       - run: ansible-playbook -i "${{ github.workspace }}/inventories/hetzner-cloud/hcloud.yaml" "${{ github.workspace }}/playbook.yaml"
         env:
           HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
+
+  run-asz-with-aws-ec2-x86-64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "The ${{ github.repository }} repository was cloned."
+
+      - run: echo "Preparing controller"
+      - uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
+      - run: python3 -m pip -V
+      - run: python3 -m pip install --user ansible boto3
+      - run: ansible-galaxy collection install community.general
+      - run: ansible-galaxy collection install amazon.aws
+      - run: ansible-config init --disabled > "${{ github.workspace }}/ansible.cfg"
+      - run: echo "[ssh_connection]" >> "${{ github.workspace }}/ansible.cfg"
+      - run: echo "ssh_args = -o ServerAliveInterval=10 -o StrictHostKeyChecking=no" >> "${{ github.workspace }}/ansible.cfg"
+      - run: cp "${{ github.workspace }}/ci/run-asz-with-aws-ec2/aws-ec2.yaml" "${{ github.workspace }}/playbook.yaml"
+      - run: cp "${{ github.workspace }}/ci/run-asz-with-aws-ec2/config-x86_64.yaml" "${{ github.workspace }}/config.yaml"
+
+      - run: echo "Running playbook for x86_64"
+      - run: ansible-playbook -i "${{ github.workspace }}/inventories/aws-ec2/aws_ec2.yaml" "${{ github.workspace }}/playbook.yaml"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  run-asz-with-aws-ec2-aarch64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "The ${{ github.repository }} repository was cloned."
+
+      - run: echo "Preparing controller"
+      - uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
+      - run: python3 -m pip -V
+      - run: python3 -m pip install --user ansible boto3
+      - run: ansible-galaxy collection install community.general
+      - run: ansible-galaxy collection install amazon.aws
+      - run: ansible-config init --disabled > "${{ github.workspace }}/ansible.cfg"
+      - run: echo "[ssh_connection]" >> "${{ github.workspace }}/ansible.cfg"
+      - run: echo "ssh_args = -o ServerAliveInterval=10 -o StrictHostKeyChecking=no" >> "${{ github.workspace }}/ansible.cfg"
+      - run: cp "${{ github.workspace }}/ci/run-asz-with-aws-ec2/aws-ec2.yaml" "${{ github.workspace }}/playbook.yaml"
+      - run: cp "${{ github.workspace }}/ci/run-asz-with-aws-ec2/config-aarch64.yaml" "${{ github.workspace }}/config.yaml"
+
+      - run: echo "Running playbook for aarch64"
+      - run: ansible-playbook -i "${{ github.workspace }}/inventories/aws-ec2/aws_ec2.yaml" "${{ github.workspace }}/playbook.yaml"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

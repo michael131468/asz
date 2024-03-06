@@ -1,0 +1,41 @@
+# See docs/config.md for documentation on the different parameters in this file
+
+# == Basic configuration ==
+
+# (optional) Enable building osbuildvm-images
+# Leave undefined or set to false to disable
+# Resulting VM architecture is based on the build host
+target_image: ""
+target_arch: aarch64
+target_filetype: ""
+
+osbuildvm_images_build: yes
+
+# == Advanced configuration ==
+osbuildvm_images_download_baseurl: "https://autosd.sig.centos.org/AutoSD-9/nightly/osbuildvm-images"
+
+osbuild_packages:
+  - package: "osbuild"
+    value: "osbuild"
+  - package: "osbuild-tools"
+    value: "osbuild-tools"
+  - package: "osbuild-ostree"
+    value: "osbuild-ostree"
+  - package: "osbuild-auto"
+    value: "osbuild-auto"
+
+sample_images_git_url: "https://gitlab.com/CentOS/automotive/sample-images.git"
+sample_images_git_ref: "main"
+sample_images_workdir: "{{ ansible_env.HOME }}/zeppelin/sample-images"
+sample_images_build_path: "{{ sample_images_workdir }}/osbuild-manifests/_build"
+
+# AWS EC2 configuration
+aws_ec2_aarch64_instance_type: "t4g.medium"
+aws_ec2_aarch64_ami: "ami-0249b4054bde4661d" # CentOS Stream 9 aarch64 20240212
+aws_ec2_aarch64_region: "eu-central-1"
+aws_ec2_aarch64_ssh_key: "ci@asz"
+
+aws_ec2_x86_64_instance_type: "t3.medium"
+aws_ec2_x86_64_ami: "ami-000dc02a9a29648e7" # CentOS Stream 9 x86_64 20240212
+aws_ec2_x86_64_region: "eu-central-1"
+aws_ec2_x86_64_ssh_key: "ci@asz"
