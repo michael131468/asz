@@ -19,6 +19,11 @@
     instance_type: "{{ aws_ec2_aarch64_instance_type if target_arch == 'aarch64' else aws_ec2_x86_64_instance_type }}"
     image_id: "{{ aws_ec2_aarch64_ami if target_arch == 'aarch64' else aws_ec2_x86_64_ami }}"
     region: "{{ aws_ec2_aarch64_region if target_arch == 'aarch64' else aws_ec2_x86_64_region }}"
+    volumes:
+      - device_name: /dev/sda1
+        ebs:
+          volume_size: 20
+          delete_on_termination: true
     network:
       assign_public_ip: true
       delete_on_termination: true
